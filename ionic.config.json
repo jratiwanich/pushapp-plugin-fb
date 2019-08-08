@@ -1,5 +1,7 @@
 {
   "name": "pushapp-plugin",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
