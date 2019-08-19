@@ -12,7 +12,9 @@ export class PushNotificationService {
 
   }
 
-  init(): void {
+  
+
+  initPushNotification(): void {
 
     let push = (<any> window).PushNotification.init({
       ios: {

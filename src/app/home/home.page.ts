@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Push, PushObject, PushOptions } from '@ionic-native/push/ngx';
 
-import {PushNotificationService} from '../services/push-notification.service'
+import {PushNotificationService} from '../services/push-notification.service';
+import {PhonegapPushService} from '../services/phonegap-push.service';
+import {PushsnsService} from '../services/pushsns.service';
 
 @Component({
   selector: 'app-home',
@@ -10,70 +11,65 @@ import {PushNotificationService} from '../services/push-notification.service'
 })
 export class HomePage implements OnInit {
 
-  constructor(private push: Push, private pushsrv: PushNotificationService) {
+  public deviceToken;
+
+  constructor( 
+    private pushsrv: PushNotificationService,
+    private phonegapsrv: PhonegapPushService,
+    private pushsnssrv: PushsnsService
+  ) {
    
   }
 
   ngOnInit(){
-    this.initPushNotification();
 
+
+  }
+
+  initPushSns(){
+ 
+    this.pushsnssrv.init(this.deviceToken.registrationId);
+  }
+
+  subscribeTopic(){
+    this.pushsnssrv.createTopic(
+      "arn:aws:sns:us-east-1:971693144086:Test1Topic",
+      "arn:aws:sns:us-east-1:971693144086:Test1Topic:0b9c051a-c794-403b-85b7-a5a7e1d815ea");
+
+  }
+
+  listChannel(){
+    this.phonegapsrv.listChannels()
   }
 
   initPushNotification(){
+    this.pushsrv.initPushNotification();
+  }
 
-    // to check if we have permission
-    this.push.hasPermission()
-      .then((res: any) => {
+  initPhonegapPush(){
 
-        if (res.isEnabled) {
-          console.log('We have permission to send push notifications');
-        } else {
-          console.log('We do not have permission to send push notifications');
-        }
+    this.phonegapsrv.initPhonegapPush();
 
-      });
+  //   try{
+  //     this.phonegapsrv.initPhonegapPush();
+  //     //this.deviceToken = await this.phonegapsrv.initPhonegapPush();
+  //     if(this.deviceToken){
 
-    // Create a channel (Android O and above). You'll need to provide the id, description and importance properties.
-    this.push.createChannel({
-    id: "testchannel1",
-    description: "My first test channel",
-    // The importance property goes from 1 = Lowest, 2 = Low, 3 = Normal, 4 = High and 5 = Highest.
-    importance: 3
-    }).then(() => console.log('Channel created'));
+  //       alert(this.deviceToken.registrationType + " Token: " + this.deviceToken.registrationId);
+  //       let check = await this.phonegapsrv.checkPermission();
+  //       console.debug("initPhonegapPush()",check);
+  //     }
 
-    // Delete a channel (Android O and above)
-    this.push.deleteChannel('testchannel1').then(() => console.log('Channel deleted'));
+  //     //this.phonegapsrv.pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 
-    // Return a list of currently configured channels
-    this.push.listChannels().then((channels) => console.log('List of channels', channels))
+  //  //this.phonegapsrv.pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
 
-
-    // to initialize push notifications
-    const options: PushOptions = {
-      android: {
-        senderID: "637490251602",
-        forceShow: true,
-      },
-      ios: {
-          alert: 'true',
-          badge: true,
-          sound: 'false'
-      },
-      windows: {},
-      browser: {
-          pushServiceURL: 'http://push.api.phonegap.com/v1/push'
-      }
-    }
-
-    const pushObject: PushObject = this.push.init(options);
-    pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
-    pushObject.on('registration').subscribe((registration: any) => console.log('Device registered', registration));
-    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+  //   }catch(e){
+  //     console.error("ERROR: initPhonegapPush()",e);
+  //   }
 
   }
 
-  startNotification(){
-    //this.push.notifications
-    this.pushsrv.init();
-  }
+
+
 }

@@ -1,16 +1,39 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      Ionic Push Notification Test
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
-  <ion-button (click)="startNotification()">Notify</ion-button>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" (click)="initPushSns()">AWS SNS</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" (click)="initPhonegapPush()">Ionic Plugin</ion-button>
+      </ion-col>
+      <!-- <ion-col>
+        <ion-button disabled color="primary" (click)="initPushNotification()">FB Push Notification</ion-button>
+      </ion-col>             -->
+    </ion-row>
+    <ion-row>
+        <ion-col>
+          <ion-button color="primary" (click)="subscribeTopic()">Subscribe SNS Topic</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button color="primary" (click)="listChannel()">List Channel</ion-button>
+        </ion-col>
+        <!-- <ion-col>
+          <ion-button disabled color="primary" (click)="initPushNotification()">FB Push Notification</ion-button>
+        </ion-col>             -->
+      </ion-row>
+      
+  </ion-grid>
+
+{{deviceToken | json}}
 
 </ion-content>
