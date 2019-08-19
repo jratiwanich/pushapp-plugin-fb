@@ -46,27 +46,27 @@ export class HomePage implements OnInit {
     this.pushsrv.initPushNotification();
   }
 
-  initPhonegapPush(){
+  async initPhonegapPush(){
 
-    this.phonegapsrv.initPhonegapPush();
+    //this.phonegapsrv.initPhonegapPush();
 
-  //   try{
-  //     this.phonegapsrv.initPhonegapPush();
-  //     //this.deviceToken = await this.phonegapsrv.initPhonegapPush();
-  //     if(this.deviceToken){
+    try{
+      //this.phonegapsrv.initPhonegapPush();
+      this.deviceToken = await this.phonegapsrv.initPhonegapPush();
+      if(this.deviceToken){
 
-  //       alert(this.deviceToken.registrationType + " Token: " + this.deviceToken.registrationId);
-  //       let check = await this.phonegapsrv.checkPermission();
-  //       console.debug("initPhonegapPush()",check);
-  //     }
+        alert(this.deviceToken.registrationType + " Token: " + this.deviceToken.registrationId);
+        let check = await this.phonegapsrv.checkPermission();
+        console.debug("initPhonegapPush()",check);
+      }
 
-  //     //this.phonegapsrv.pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+      this.phonegapsrv.pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 
-  //  //this.phonegapsrv.pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
+      this.phonegapsrv.pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
 
-  //   }catch(e){
-  //     console.error("ERROR: initPhonegapPush()",e);
-  //   }
+    }catch(e){
+      console.error("ERROR: initPhonegapPush()",e);
+    }
 
   }
 

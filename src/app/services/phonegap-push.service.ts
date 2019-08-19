@@ -67,32 +67,33 @@ export class PhonegapPushService {
       }
     }
 
-    let pushObject:PushObject = this.push.init(options);
+    // let pushObject:PushObject = this.push.init(options);
 
-    pushObject.on('registration').subscribe((registration: any) => {
-            console.log('APNS Device Token registered', registration);
-            alert(registration.registrationType + " Token: " + registration.registrationId);
+    // pushObject.on('registration').subscribe((registration: any) => {
+    //         console.log('APNS Device Token registered', registration);
+    //         alert(registration.registrationType + " Token: " + registration.registrationId);
   
-          },error=>{
-              console.error("ERROR in registration",error);
-          });
+    //       },error=>{
+    //           console.error("ERROR in registration",error);
+    //       });
 
-    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+    //pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 
-    pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
+    //pushObject.on('notification').subscribe((notification: any) => console.log('Received a notification', notification));
 
  
-    // return new Promise((resolve, reject)=>{
-    //   this.pushObject = this.push.init(options);
-    //   //this.pushObject = pushObject;
-    //   this.pushObject.on('registration').subscribe((registration: any) => {
-    //     console.log('APNS Device Token registered', registration);
-    //     resolve(registration);
-    //   },error=>{
-    //     console.error("ERROR in registration",error);
-    //     reject(error);
-    //   });
-    // });
+    return new Promise((resolve, reject)=>{
+
+      this.pushObject = this.push.init(options);
+      //this.pushObject = pushObject;
+      this.pushObject.on('registration').subscribe((registration: any) => {
+        console.log('APNS Device Token registered', registration);
+        resolve(registration);
+      },error=>{
+        console.error("ERROR in registration",error);
+        reject(error);
+      });
+    });
 
 
 
